@@ -1,13 +1,11 @@
-import styles from "./globals.css";
+import styles from "./globals.css?url";
 import {
     json,
     LoaderFunctionArgs,
     type LinksFunction,
 } from "@remix-run/cloudflare";
-import { cssBundleHref } from "@remix-run/css-bundle";
 import {
     Links,
-    LiveReload,
     Meta,
     Outlet,
     Scripts,
@@ -15,13 +13,11 @@ import {
     useLoaderData,
 } from "@remix-run/react";
 
-export const links: LinksFunction = () => [
-    { rel: "stylesheet", href: styles },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const loader = ({ context }: LoaderFunctionArgs) => {
-    return json({ version: context.env.VERSION });
+    console.dir(context);
+    return json({ version: context.env?.VERSION });
 };
 
 export default function App() {
@@ -97,7 +93,6 @@ export default function App() {
                 </div>
                 <ScrollRestoration />
                 <Scripts />
-                <LiveReload />
                 <script
                     dangerouslySetInnerHTML={{
                         __html: "window.counterscale = {'q': [['set', 'siteId', 'counterscale-dev'], ['trackPageview']] };",
