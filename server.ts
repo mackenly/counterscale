@@ -1,5 +1,4 @@
 import type { RequestInit } from "@cloudflare/workers-types";
-
 import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
 import type { AppLoadContext } from "@remix-run/cloudflare";
 import { createRequestHandler, logDevReady } from "@remix-run/cloudflare";
