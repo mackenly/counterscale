@@ -23,9 +23,46 @@ function calculateCountPercentages(countByProperty: CountByProperty) {
         return `${percentage}%`;
     });
 }
+
+function loadingRows(gridCols: string) {
+    const NUM_ROWS = 10;
+    return (
+        <div>
+            {[...Array(NUM_ROWS).keys()].map((_, index) => (
+                <TableRow
+                    key={index}
+                    className={`group [&_td]:last:rounded-b-md ${gridCols}`}
+                >
+                    <TableCell className="min-w-48 break-all">
+                        <div className="animate-pulse h-4 w-full bg-orange-300 rounded-md" />
+                    </TableCell>
+                </TableRow>
+            ))}
+        </div>
+    );
+}
+
+function dataRow(
+    gridCols: string,
+    item: NonNullable<NonNullable<string | number>>[],
+) {
+    const itemArray = item.map((value) => String(value));
+    return (
+        <TableRow className={`group [&_td]:last:rounded-b-md ${gridCols}`}>
+            <TableCell className="font-medium min-w-48 break-all">
+                {itemArray[0]}
+            </TableCell>
+            <TableCell className="text-right min-w-16">
+                {itemArray[1]}
+            </TableCell>
+        </TableRow>
+    );
+}
+
 export default function TableCard({
     countByProperty,
     columnHeaders,
+    loading,
 }: InferProps<typeof TableCard.propTypes>) {
     const barChartPercentages = calculateCountPercentages(
         countByProperty as CountByProperty,
@@ -56,27 +93,11 @@ export default function TableCard({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {(countByProperty || []).map((item, key) => (
-                    <TableRow
-                        key={item[0]}
-                        className={`group [&_td]:last:rounded-b-md ${gridCols}`}
-                        width={barChartPercentages[key]}
-                    >
-                        <TableCell className="font-medium min-w-48 break-all">
-                            {item[0]}
-                        </TableCell>
-
-                        <TableCell className="text-right min-w-16">
-                            {countFormatter.format(item[1] as number)}
-                        </TableCell>
-
-                        {item.length > 2 && (
-                            <TableCell className="text-right min-w-16">
-                                {countFormatter.format(item[2] as number)}
-                            </TableCell>
-                        )}
-                    </TableRow>
-                ))}
+                {loading
+                    ? loadingRows(gridCols)
+                    : (countByProperty || []).map((item, key) =>
+                          dataRow(gridCols, item || ""),
+                      )}
             </TableBody>
         </Table>
     );
@@ -93,4 +114,5 @@ TableCard.propTypes = {
         ).isRequired,
     ).isRequired,
     columnHeaders: PropTypes.array,
+    loading: PropTypes.bool,
 };

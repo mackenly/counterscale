@@ -44,20 +44,19 @@ const ReferrerCard = ({
 
     const hasMore = countsByProperty.length === 10;
     return (
-        <Card className={dataFetcher.state === "loading" ? "opacity-60" : ""}>
-            {countsByProperty ? (
-                <div className="grid grid-rows-[auto,40px] h-full">
-                    <TableCard
-                        countByProperty={countsByProperty}
-                        columnHeaders={columnHeaders}
-                    />
-                    <PaginationButtons
-                        page={page}
-                        hasMore={hasMore}
-                        handlePagination={handlePagination}
-                    />
-                </div>
-            ) : null}
+        <Card>
+            <div className="grid grid-rows-[auto,40px] h-full">
+                <TableCard
+                    countByProperty={countsByProperty || []}
+                    columnHeaders={columnHeaders}
+                    loading={dataFetcher.state === "loading"}
+                />
+                <PaginationButtons
+                    page={page}
+                    hasMore={hasMore}
+                    handlePagination={handlePagination}
+                />
+            </div>
         </Card>
     );
 };
